@@ -22,5 +22,7 @@ namespace Fiorello_PB101_Demo.Controllers
             if (product is null) return NotFound();
             return View(product);
         }
+
+
     }
 }

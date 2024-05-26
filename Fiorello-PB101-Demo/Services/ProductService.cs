@@ -28,7 +28,7 @@ namespace Fiorello_PB101_Demo.Services
                                           .Include(m => m.ProductImages)
                                           .Skip((page - 1) * take)
                                           .Take(take)
-                                          .ToListAsync(); ;
+                                          .ToListAsync(); 
         }
 
         public async Task<IEnumerable<Product>> GetAllWithImagesAsync()

@@ -18,6 +18,7 @@ namespace Fiorello_PB101_Demo.Data
         public DbSet<Expert> Experts { get; set; }
         public DbSet<Setting> Settings { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Slider>().HasQueryFilter(m => !m.SoftDeleted);

@@ -1,8 +1,12 @@
 ﻿using Fiorello_PB101_Demo.Data;
+using Fiorello_PB101_Demo.Helpers;
 using Fiorello_PB101_Demo.Models;
+using Fiorello_PB101_Demo.Services;
 using Fiorello_PB101_Demo.Services.Interfaces;
 using Fiorello_PB101_Demo.ViewModels.Categories;
+using Fiorello_PB101_Demo.ViewModels.Products;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Fiorello_PB101_Demo.Areas.Admin.Controllers
 {
@@ -20,12 +24,6 @@ namespace Fiorello_PB101_Demo.Areas.Admin.Controllers
         {
             _categoryService = categoryService;
             _context = context;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            return View(await _categoryService.GetAllWithProductCountAsync());
         }
 
         [HttpGet]
@@ -151,5 +149,28 @@ namespace Fiorello_PB101_Demo.Areas.Admin.Controllers
 
             return Ok(category);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(int page = 1)
+        {
+            var categories =await _categoryService.GetAllPaginateAsync(page, 3);
+
+            var mappedDatas = _categoryService.GetMappedDatas(categories);
+
+            int totalPage = await GetPageCountAsync(3);
+
+            Paginate<CategoryProductVM> paginateDatas = new(mappedDatas, totalPage, page);
+
+            return View(paginateDatas);
+        }
+
+        private async Task<int>GetPageCountAsync(int take)
+        {
+            int CategoryCount = await _categoryService.GetCountAsync();
+            return (int)Math.Ceiling((decimal)CategoryCount / take);    
+        }
+
+
+
     }
 }
